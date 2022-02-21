@@ -23,7 +23,4 @@ kubectl logs -l istio=egressgateway-with-sni-proxy -c istio-proxy -n istio-syste
 
 # SNI proxy log
 kubectl logs -l istio=egressgateway-with-sni-proxy -n istio-system -c sni-proxy
-
-
-
 ```
