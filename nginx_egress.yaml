@@ -1,37 +1,37 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-nginx
-  namespace: mesh-external
+  name: nginx-egress
+  namespace: istio-system
   labels:
-    run: my-nginx
+    run: nginx-egress
 spec:
   ports:
   - port: 443
     protocol: TCP
   selector:
-    run: my-nginx
+    run: nginx-egress
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-nginx
-  namespace: mesh-external
+  name: nginx-egress
+  namespace: istio-system
 spec:
   selector:
     matchLabels:
-      run: my-nginx
+      run: nginx-egress
   replicas: 1
   template:
     metadata:
       labels:
-        run: my-nginx
+        run: nginx-egress
     spec:
       containers:
-      - name: my-nginx
+      - name: nginx-egress
         image: nginx
         ports:
-        - containerPort: 443
+        - containerPort: 80
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx
@@ -45,7 +45,7 @@ spec:
       volumes:
       - name: nginx-config
         configMap:
-          name: nginx-configmap
+          name: nginx-egress
       - name: nginx-server-certs
         secret:
           secretName: nginx-server-certs

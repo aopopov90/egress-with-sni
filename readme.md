@@ -61,3 +61,10 @@ kubectl create secret -n istio-system generic client-credential --from-file=tls.
 kubectl create secret -n istio-system generic client-credential-cacert --from-file=cacert=example.com.crt
 
 ```
+
+# Nginx Egress
+```
+kubectl create configmap nginx-egress -n istio-system --from-file=nginx.conf=./nginx_egress.conf -o yaml --dry-run=client | kubectl apply -f -
+kubectl create -n istio-system secret tls nginx-server-certs --key nginx-egress.istio-system.svc.cluster.local.key --cert my-nginx.mesh-external.svc.cluster.local.crt
+kubectl apply -f <(istioctl kube-inject -f ./nginx_egress.yaml) -n istio-system
+```
