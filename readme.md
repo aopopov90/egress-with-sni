@@ -12,8 +12,8 @@ kubectl apply -f ./egressgateway-with-sni-proxy.yaml
 kubectl apply -f ./egress-resources.yaml
 
 # deploy test app
-kubectl apply -f <(istioctl kube-inject -f ./sleep.yaml)
-export SOURCE_POD=$(kubectl get pod -l app=sleep -o jsonpath={.items..metadata.name})
+kubectl apply -f <(istioctl kube-inject -f ./nginx.yaml)
+export SOURCE_POD=$(kubectl get pod -l app=nginx -o jsonpath={.items..metadata.name})
 
 # test
 kubectl exec "$SOURCE_POD" -c sleep -- sh -c 'curl -v https://en.wikipedia.org/wiki/Main_Page'
