@@ -24,6 +24,8 @@ spec:
   trafficPolicy:
     tls:
       mode: DISABLE
+      # mode: MUTUAL
+      # credentialName: client-credential
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
@@ -31,7 +33,7 @@ metadata:
   name: wikipedia
 spec:
   hosts:
-  - "*.wikipedia.org"
+  - "*.org"
   ports:
   - number: 443
     name: tls
@@ -50,9 +52,12 @@ spec:
       name: tls-egress
       protocol: TLS
     hosts:
-    - "*.wikipedia.org"
+    - "*.org"
     tls:
+      # mode: PASSTHROUGH
       mode: ISTIO_MUTUAL
+      # mode: MUTUAL
+      # credentialName: client-credential
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -70,6 +75,11 @@ spec:
             number: 443
           tls:
             mode: ISTIO_MUTUAL
+            # mode: MUTUAL
+            # clientCertificate: /etc/istio/egress-app-credential/tls.crt 
+            # privateKey: /etc/istio/egress-app-credential/tls.key
+            # caCertificates: /etc/istio/egress-app-credential/ca.crt
+            # sni: my-nginx.mesh-external.svc.cluster.local  
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -77,7 +87,7 @@ metadata:
   name: direct-wikipedia-through-egress-gateway
 spec:
   hosts:
-  - "*.wikipedia.org"
+  - "*.org"
   gateways:
   - mesh
   - istio-egressgateway-with-sni-proxy
@@ -87,7 +97,7 @@ spec:
       - mesh
       port: 443
       sniHosts:
-      - "*.wikipedia.org"
+      - "*.org"
     route:
     - destination:
         host: istio-egressgateway-with-sni-proxy.istio-system.svc.cluster.local

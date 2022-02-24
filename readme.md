@@ -9,7 +9,7 @@ kubectl create configmap egress-sni-proxy-configmap -n istio-system --from-file=
 kubectl apply -f ./egressgateway-with-sni-proxy.yaml
 
 # deploy resources
-kubectl apply -f ./egress-resources.yaml
+kubectl apply -f ./egress-resources.yaml -n istio-system
 
 # deploy test app
 kubectl apply -f <(istioctl kube-inject -f ./nginx.yaml)
@@ -46,6 +46,7 @@ kubectl create namespace mesh-external
 # Create Kubernetes Secrets to hold the server’s and CA certificates.
 kubectl create -n mesh-external secret tls nginx-server-certs --key my-nginx.mesh-external.svc.cluster.local.key --cert my-nginx.mesh-external.svc.cluster.local.crt
 kubectl create -n mesh-external secret generic nginx-ca-certs --from-file=example.com.crt
+kubectl create -n istio-system secret generic nginx-ca-certs --from-file=example.com.crt
 
 # Create a Kubernetes ConfigMap to hold the configuration of the NGINX server:
 kubectl create configmap nginx-configmap -n mesh-external --from-file=nginx.conf=./nginx.conf -o yaml --dry-run=client | kubectl apply -f -
@@ -56,5 +57,7 @@ kubectl apply -f ./nginx_server.yaml
 # Create Kubernetes Secrets to hold the client’s certificates:
 kubectl create secret -n istio-system generic client-credential --from-file=tls.key=client.example.com.key \
   --from-file=tls.crt=client.example.com.crt --from-file=ca.crt=example.com.crt
+
+kubectl create secret -n istio-system generic client-credential-cacert --from-file=cacert=example.com.crt
 
 ```
