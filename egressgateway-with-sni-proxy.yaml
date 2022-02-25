@@ -183,6 +183,9 @@ spec:
           privileged: false
           readOnlyRootFilesystem: true
         volumeMounts:
+        - mountPath: /etc/istio/egress-app-credential
+          name: app-certs
+          readOnly: true
         - mountPath: /etc/istio/proxy
           name: istio-envoy
         - mountPath: /etc/istio/config
@@ -218,6 +221,10 @@ spec:
         runAsUser: 1337
       serviceAccountName: istio-egressgateway-with-sni-proxy-service-account
       volumes:
+      - name: app-certs
+        secret:
+          defaultMode: 420
+          secretName: client-credential
       - configMap:
           name: istio-ca-root-cert
         name: istiod-ca-cert

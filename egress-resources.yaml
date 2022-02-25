@@ -55,9 +55,9 @@ spec:
     - "*.org"
     tls:
       # mode: PASSTHROUGH
-      mode: ISTIO_MUTUAL
-      # mode: MUTUAL
-      # credentialName: client-credential
+      # mode: ISTIO_MUTUAL
+      mode: MUTUAL
+      credentialName: client-credential
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -74,11 +74,11 @@ spec:
         - port:
             number: 443
           tls:
-            mode: ISTIO_MUTUAL
-            # mode: MUTUAL
-            # clientCertificate: /etc/istio/egress-app-credential/tls.crt 
-            # privateKey: /etc/istio/egress-app-credential/tls.key
-            # caCertificates: /etc/istio/egress-app-credential/ca.crt
+            # mode: ISTIO_MUTUAL
+            mode: MUTUAL
+            clientCertificate: /etc/istio/egress-app-credential/tls.crt 
+            privateKey: /etc/istio/egress-app-credential/tls.key
+            caCertificates: /etc/istio/egress-app-credential/ca.crt
             # sni: my-nginx.mesh-external.svc.cluster.local  
 ---
 apiVersion: networking.istio.io/v1alpha3

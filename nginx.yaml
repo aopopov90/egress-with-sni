@@ -13,9 +13,9 @@ spec:
   strategy: {}
   template:
     metadata:
-      # annotations:
-      #   sidecar.istio.io/userVolumeMount: '[{"name":"app-certs", "mountPath":"/etc/istio/egress-app-credential", "readonly":true}]'
-      #   sidecar.istio.io/userVolume: '[{"name":"app-certs", "secret":{"secretName":"client-credential"}}]'
+      annotations:
+        sidecar.istio.io/userVolumeMount: '[{"name":"app-certs", "mountPath":"/etc/istio/egress-app-credential", "readonly":true}]'
+        sidecar.istio.io/userVolume: '[{"name":"app-certs", "secret":{"secretName":"client-credential"}}]'
       creationTimestamp: null
       labels:
         app: nginx

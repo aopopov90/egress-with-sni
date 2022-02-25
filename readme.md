@@ -61,3 +61,7 @@ kubectl create secret -n istio-system generic client-credential --from-file=tls.
 kubectl create secret -n istio-system generic client-credential-cacert --from-file=cacert=example.com.crt
 
 ```
+# Cert troubleshooting
+```
+istioctl proxy-config secret nginx-54d7c7dc6c-cvw89 -n istio-system
+```
