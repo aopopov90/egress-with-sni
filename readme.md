@@ -61,7 +61,11 @@ kubectl create secret -n istio-system generic client-credential --from-file=tls.
 kubectl create secret -n istio-system generic client-credential-cacert --from-file=cacert=example.com.crt
 
 ```
-# Cert troubleshooting
+# Troubleshooting
 ```
 istioctl proxy-config secret nginx-54d7c7dc6c-cvw89 -n istio-system
+istioctl proxy-config cluster istio-egressgateway-with-sni-proxy-74f5b6c746-zl696 -n istio-system
+istioctl proxy-config listener istio-egressgateway-with-sni-proxy-74f5b6c746-zl696 -n istio-system
+istioctl proxy-config cluster nginx-54d7c7dc6c-6psfk -n istio-system
+istioctl proxy-config listener nginx-54d7c7dc6c-6psfk -n istio-system
 ```
