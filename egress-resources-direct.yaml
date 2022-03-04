@@ -1,0 +1,34 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: certauth
+spec:
+  hosts:
+  - "*.fr"
+  # - certauth.idrix.fr
+  location: MESH_EXTERNAL
+  ports:
+  # # - number: 80
+  # #   name: http-port
+  # #   protocol: HTTP
+  # #   targetPort: 443
+  - number: 443
+    name: https-port
+    protocol: HTTPS
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: certauth
+spec:
+  host: "*.fr"
+  # host: certauth.idrix.fr
+  trafficPolicy:
+    # portLevelSettings:
+    # - port:
+    #     number: 443
+      tls:
+        mode: MUTUAL
+        clientCertificate: /etc/istio/egress-app-credential/tls.crt 
+        privateKey: /etc/istio/egress-app-credential/tls.key
+        caCertificates: /etc/istio/egress-app-credential/ca.crt
